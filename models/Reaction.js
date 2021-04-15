@@ -14,7 +14,7 @@ const ReactionSchema = new Schema(
         createdAt: {
             type: Date,
             default: Date.now,
-            // get: (value) => dateFormat(value)
+            get: (value) => dateFormat(value)
         },
         username: {
             type: String,
