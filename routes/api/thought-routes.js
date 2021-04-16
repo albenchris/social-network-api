@@ -8,30 +8,30 @@ const {
 } = require('../../controllers/thought-controllers');
 
 // http://localhost:3001/api/thoughts/
-// GET All, CREATE
+// GET all, CREATE
 router
     .route('/')
     .get(getAllThoughts)
     .post(createThought);
 
 // http://localhost:3001/api/thoughts/<thoughtId>
-// GET One, UPDATE, REMOVE
+// GET one, UPDATE, REMOVE
+// ADD reaction
 router
-    .route('/:id')
+    .route('/:thoughtId')
     .get(getOneThought)
     .put(updateThought)
     .delete(removeThought);
 
-// http://localhost:3001/api/thoughts/<thoughtId>/reactions/
-// ADD reaction
-router
-    .route('/:id/reactions/:reactionId')
-    // .put()
+// router
+//     .route('/:userId/:thoughtId')
+//     .delete(removeThought);
 
-// http://localhost:3001/api/thoughts/<thoughtId>/reactions/<reactionId>
-// REMOVE reaction
+// http://localhost:3001/api/thoughts/<thoughtId>/<reactionId>
+// ADD or REMOVE reaction
 router
-    .route('/:id/reactions/:reactionId')
-    // .delete();
+    .route('/:id/:reactionId')
+    // .put()
+    // .delete()
 
 module.exports = router;
