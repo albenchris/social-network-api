@@ -7,22 +7,22 @@ const {
     deleteUser
 } = require('../../controllers/user-controllers');
 
-// localhost:3001/api/users/
-// GET All, POST
+// http://localhost:3001/api/users/
+// GET All, CREATE
 router
     .route('/')
     .get(getAllUsers)
     .post(createUser);
 
-// localhost:3001/api/users/<id>
-// GET One, PUT, DELETE
+// http://localhost:3001/api/users/<id>
+// GET One, UPDATE, DELETE
 router
     .route('/:id')
     .get(getOneUser)
     .put(updateUser)
     .delete(deleteUser);
 
-// localhost:3001/api/users/<id>/friends/<friendId>
+// http://localhost:3001/api/users/<id>/friends/<friendId>
 // ADD or REMOVE friend
 router
     .route('/:id/friends/:friendId')
