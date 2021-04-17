@@ -101,7 +101,7 @@ const thoughtController = {
     },
 
 
-    //============================================================================
+    //================= REACTIONS ===========================================================
 
     // CREATE reaction
     addReaction({ params, body }, res) {
@@ -123,8 +123,6 @@ const thoughtController = {
 
     // DELETE reaction
     removeReaction({ params }, res) {
-        console.log(chalk.greenBright(JSON.stringify(params)));
-
         Thought.findOneAndUpdate(
             { _id: params.thoughtId },
             { $pull: { reactions: { reactionId: params.reactionId } } },
