@@ -6,10 +6,6 @@ const thoughtController = {
     // GET all thoughts
     getAllThoughts(req, res) {
         Thought.find({})
-            .populate({
-                path: 'thoughts',
-                select: '-__v'
-            })
             .select('-__v')
             .sort({ _id: -1 })
             .then(dbThoughts => res.json(dbThoughts))
@@ -22,6 +18,7 @@ const thoughtController = {
     // GET one thought
     getOneThought({ params }, res) {
         Thought.findOne({ _id: params.thoughtId })
+            .select('-__v')
             .then(dbThought => {
                 if (!dbThought) return res.status(404).json({ message: 'No thought found with this id!' });
 
@@ -43,11 +40,6 @@ const thoughtController = {
                     { new: true }
                 );
             })
-            // .populate({
-            //     path: 'thoughts',
-            //     select: '-__v'
-            // })
-            // .select('-__v')
             .then(dbUser => {
                 if (!dbUser) return res.status(404).json({ message: 'No user found with this id!' });
                 
@@ -83,16 +75,12 @@ const thoughtController = {
             .then(removedThought => {
                 if (!removedThought) return res.status(404).json({ message: 'No thought found with this id!' });
 
+                res.json(removedThought);
                 return User.findOneAndUpdate(
                     { _id: body.userId },
                     { $pull: { thoughts: params.thoughtId } },
                     { new: true }
                 );
-            })
-            .then(dbUser => {
-                if (!dbUser) return res.status(404).json({ message: 'No user found with this id!' });
-
-                res.json(dbUser);
             })
             .catch(err => {
                 console.log(chalk.red(err));

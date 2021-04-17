@@ -1,4 +1,4 @@
-const { User } = require('../models');
+const { User, Thought } = require('../models');
 const chalk = require('chalk');
 
 const userController = {
@@ -6,10 +6,6 @@ const userController = {
     // GET all users
     getAllUsers(req, res) {
         User.find({})
-            .populate({
-                path: 'thoughts',
-                select: '-__v'
-            })
             .select('-__v')
             .then(dbUsers => res.json(dbUsers))
             .catch(err => {
@@ -21,10 +17,6 @@ const userController = {
     // GET one user
     getOneUser({ params }, res) {
         User.findOne({ _id: params.id })
-            .populate({
-                path: 'thoughts',
-                select: '-__v'
-            })
             .select('-__v')
             .then(dbUser => {
                 if (!dbUser) return res.status(404).json({ message: 'No user found with this id!' });
@@ -40,6 +32,7 @@ const userController = {
     // CREATE user
     createUser({ body }, res) {
         User.create(body)
+            .select('-__v')
             .then(dbUser => res.json(dbUser))
             .catch(err => {
                 console.log(chalk.red(err));
@@ -54,6 +47,7 @@ const userController = {
             body,
             { new: true, runValidators: true }
         )
+            .select('-__v')
             .then(dbUser => {
                 if (!dbUser) return res.statue(404).json({ message: 'No user found with this id!' });
 
@@ -68,8 +62,13 @@ const userController = {
     // DELETE user
     deleteUser({ params }, res) {
         User.findOneAndDelete({ _id: params.id })
+            .select('-__v')
             .then(dbUser => {
                 if (!dbUser) return res.statue(404).json({ message: 'No user found with this id!' });
+
+                // Thought.deleteMany({ username: dbUser.username });
+            
+                console.log(chalk.bgBlue(dbUser))
 
                 res.json(dbUser);
             })
@@ -85,7 +84,7 @@ const userController = {
     addFriend({ params }, res) {
         User.findOneAndUpdate(
             { _id: params.id },
-            { $addToSet: { friends: params.friendId} },
+            { $addToSet: { friends: params.friendId } },
             { new: true }
         )
             .then(dbUser => {
