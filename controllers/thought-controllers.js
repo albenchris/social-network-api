@@ -98,16 +98,48 @@ const thoughtController = {
                 console.log(chalk.red(err));
                 res.json(err);
             });
-    }
+    },
 
 
     //============================================================================
 
     // CREATE reaction
+    addReaction({ params, body }, res) {
+        Thought.findOneAndUpdate(
+            { _id: params.thoughtId },
+            { $push: { reactions: body } },
+            { new: true }
+        )
+            .then(dbThought => {
+                if (!dbThought) return res.status(404).json({ message: 'No thought found with this id!' });
 
+                res.json(dbThought);
+            })
+            .catch(err => {
+                console.log(chalk.red(err));
+                res.json(err);
+            });
+    },
 
     // DELETE reaction
+    removeReaction({ params }, res) {
+        console.log(chalk.greenBright(JSON.stringify(params)));
 
+        Thought.findOneAndUpdate(
+            { _id: params.thoughtId },
+            { $pull: { reactions: { reactionId: params.reactionId } } },
+            { new: true }
+        )
+            .then(dbThought => {
+                if (!dbThought) return res.status(404).json({ message: 'No thought found with this id!' });
+
+                res.json(dbThought);
+            })
+            .catch(err => {
+                console.log(chalk.red(err));
+                res.json(err);
+            });
+    }
 
 }
 
