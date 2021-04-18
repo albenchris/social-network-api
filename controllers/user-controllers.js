@@ -32,7 +32,6 @@ const userController = {
     // CREATE user
     createUser({ body }, res) {
         User.create(body)
-            .select('-__v')
             .then(dbUser => res.json(dbUser))
             .catch(err => {
                 console.log(chalk.red(err));
@@ -66,10 +65,9 @@ const userController = {
             .then(dbUser => {
                 if (!dbUser) return res.statue(404).json({ message: 'No user found with this id!' });
 
-                // Thought.deleteMany({ username: dbUser.username });
+                // dbUser.forEach(thoughts.removeUserThoughts());
+                console.log(chalk.cyanBright(dbUser.thoughts));
             
-                console.log(chalk.bgBlue(dbUser))
-
                 res.json(dbUser);
             })
             .catch(err => {
@@ -116,5 +114,9 @@ const userController = {
     }
 
 }
+
+const removeUserThoughts = (thoughtId) => {
+    Thought.findOneAndDelete({ _id: thoughtId });
+};
 
 module.exports = userController;
