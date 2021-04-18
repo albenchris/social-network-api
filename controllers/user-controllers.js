@@ -65,8 +65,9 @@ const userController = {
             .then(dbUser => {
                 if (!dbUser) return res.statue(404).json({ message: 'No user found with this id!' });
 
-                // dbUser.forEach(thoughts.removeUserThoughts());
-                console.log(chalk.cyanBright(dbUser.thoughts));
+                // FOR FUTURE UPDATE
+                // when USER deleted, remove all THOUGHTS created by the USER
+                console.log(chalk.cyan(dbUser.thoughts));
             
                 res.json(dbUser);
             })
@@ -115,6 +116,8 @@ const userController = {
 
 }
 
+// FOR FUTURE UPDATE
+// when USER deleted, remove all THOUGHTS created by the USER
 const removeUserThoughts = (thoughtId) => {
     Thought.findOneAndDelete({ _id: thoughtId });
 };
